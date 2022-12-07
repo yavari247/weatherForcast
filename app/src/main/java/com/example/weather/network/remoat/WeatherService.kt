@@ -1,4 +1,4 @@
-package com.example.weather.network
+package com.example.weather.network.remoat
 
 import com.example.weather.model.weather
 import retrofit2.http.GET

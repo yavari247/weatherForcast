@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/teal_200"
-    tools:context=".ui.LocationFragment">
+    tools:context=".ui.fragments.LocationFragment">
 
     <ImageView
         android:id="@+id/imageView"

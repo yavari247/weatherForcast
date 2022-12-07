@@ -1,8 +1,8 @@
 package com.example.weather.repository
 
 import android.util.Log
-import com.example.weather.network.WeatherService
-import com.example.weather.network.RetrofitInstance
+import com.example.weather.network.remoat.WeatherService
+import com.example.weather.network.remoat.RetrofitInstance
 import com.example.weather.model.weather
 import java.lang.Exception
 

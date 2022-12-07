@@ -1,4 +1,4 @@
-package com.example.weather.network
+package com.example.weather.network.remoat
 
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
