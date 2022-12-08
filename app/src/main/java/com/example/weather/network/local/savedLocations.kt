@@ -17,7 +17,7 @@ class savedLocations(private val context: Context):RoomDatabase.Callback() {
         super.onCreate(db)
 
         CoroutineScope(Dispatchers.IO).launch {
-            fillWithStartingNotes(context)
+            fillWithStartingNotes(context.applicationContext)
         }
 
 
@@ -32,7 +32,9 @@ class savedLocations(private val context: Context):RoomDatabase.Callback() {
     }
     private suspend fun fillWithStartingNotes(context: Context){
 
-        val dao = LocationDatabase.getInstance(context)?.locationDao
+        val dao = LocationDatabase.getInstance(context).locationDao
+        var li:List<Location>
+        val ptyList: MutableList<Location> = mutableListOf()
 
         try {
             val notes = loadJSONArray(context)

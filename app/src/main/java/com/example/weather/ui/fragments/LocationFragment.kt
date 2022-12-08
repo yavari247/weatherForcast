@@ -15,7 +15,6 @@ import androidx.navigation.findNavController
 import com.example.weather.R
 import com.example.weather.databinding.FragmentLocationBinding
 import com.example.weather.network.local.LocationDatabase
-import com.example.weather.repository.LocationRepo
 import com.example.weather.viewmodel.LocationViewModel
 import com.example.weather.viewmodel.LocationViewModelFactory
 import com.example.weather.viewmodel.WeatherViewModel
@@ -34,10 +33,10 @@ class LocationFragment : Fragment() {
         _binding = FragmentLocationBinding.inflate(inflater, container, false)
         val view = binding.root
         val locationDatabase = LocationDatabase.getInstance(requireContext())
-        val locationRepo: LocationRepo = LocationRepo(locationDatabase)
-        viewModelFactory =  LocationViewModelFactory(locationRepo)
+        locationDatabase.openHelper
+        viewModelFactory =  LocationViewModelFactory(locationDatabase!!)
         viewModel = ViewModelProvider(this,viewModelFactory).get(LocationViewModel::class.java)
-        viewModel.locationsData.observe(viewLifecycleOwner, Observer {
+        viewModel.item.observe(viewLifecycleOwner, Observer {
            it.forEach{
 
 

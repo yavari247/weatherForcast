@@ -23,9 +23,9 @@ abstract class LocationDatabase : RoomDatabase() {
                           instance = Room.databaseBuilder(
                                  context.applicationContext,
                                  LocationDatabase::class.java,
-                                 "locationsDB"
+                                 "locations"
                           )
-                              .addCallback(savedLocations(context))
+                              //.addCallback(savedLocations(context))
                               .build()
                       }
                   return instance

@@ -7,15 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.weather.network.remoat.WeatherService
-import com.example.weather.network.remoat.RetrofitInstance
 import com.example.weather.repository.ForcastWeather
 import com.example.weather.repository.ForcastWeatherImpl
 import com.example.weather.viewmodel.WeatherViewModel
 import com.example.weather.viewmodel.WeatherViewModelFactory
 import com.example.weather.databinding.FragmentWeatherBinding
 import com.example.weather.network.local.LocationDatabase
-import com.example.weather.repository.LocationRepo
 
 
 class weatherFragment : Fragment() {
@@ -37,9 +34,8 @@ class weatherFragment : Fragment() {
     private fun getDataWeather() {
       //  val retService= RetrofitInstance.getRetrofitInstance().create(WeatherService::class.java)
         val forcastWeather: ForcastWeather = ForcastWeatherImpl()
-        val dao = LocationDatabase.getInstance(requireContext())
-        val locationRepo:LocationRepo= LocationRepo(dao)
-        viewModelFactory =  WeatherViewModelFactory(makeLocationString(),forcastWeather,locationRepo)
+
+        viewModelFactory =  WeatherViewModelFactory(makeLocationString(),forcastWeather)
         viewModel = ViewModelProvider(this,viewModelFactory).get(WeatherViewModel::class.java)
         viewModel.weather.observe(viewLifecycleOwner, Observer {
             val data= it?.days
