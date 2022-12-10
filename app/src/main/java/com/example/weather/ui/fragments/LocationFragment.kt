@@ -1,14 +1,15 @@
 package com.example.weather.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -17,8 +18,6 @@ import com.example.weather.databinding.FragmentLocationBinding
 import com.example.weather.network.local.LocationDatabase
 import com.example.weather.viewmodel.LocationViewModel
 import com.example.weather.viewmodel.LocationViewModelFactory
-import com.example.weather.viewmodel.WeatherViewModel
-import com.example.weather.viewmodel.WeatherViewModelFactory
 
 
 class LocationFragment : Fragment() {
@@ -28,7 +27,7 @@ class LocationFragment : Fragment() {
     private lateinit var viewModelFactory: LocationViewModelFactory
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentLocationBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -36,10 +35,23 @@ class LocationFragment : Fragment() {
         locationDatabase.openHelper
         viewModelFactory =  LocationViewModelFactory(locationDatabase!!)
         viewModel = ViewModelProvider(this,viewModelFactory).get(LocationViewModel::class.java)
+
+        val sharedPref = requireContext().getSharedPreferences(
+            "mySharedPrefData", Context.MODE_PRIVATE)
+        val editor =sharedPref.edit()
+
+        val f = sharedPref.getBoolean("key",true)
+        if(f==true) {
+            viewModel.save()
+            editor.apply(){
+                putBoolean("key",false)
+                apply()
+            }
+        }
+
+        viewModel.getAllLocations()
         viewModel.item.observe(viewLifecycleOwner, Observer {
            it.forEach{
-
-
                Log.i("this is1",it.country)
             }
 

@@ -34,7 +34,6 @@ class weatherFragment : Fragment() {
     private fun getDataWeather() {
       //  val retService= RetrofitInstance.getRetrofitInstance().create(WeatherService::class.java)
         val forcastWeather: ForcastWeather = ForcastWeatherImpl()
-
         viewModelFactory =  WeatherViewModelFactory(makeLocationString(),forcastWeather)
         viewModel = ViewModelProvider(this,viewModelFactory).get(WeatherViewModel::class.java)
         viewModel.weather.observe(viewLifecycleOwner, Observer {
