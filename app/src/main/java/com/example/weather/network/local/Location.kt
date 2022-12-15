@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "location_table")
 data class Location (
-
+    @ColumnInfo(name = "City")
     var city : String,
 
-
+    @ColumnInfo(name = "Country")
     var country : String,
 
 

@@ -2,7 +2,6 @@ package com.example.weather.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +19,6 @@ import com.example.weather.databinding.FragmentLocationBinding
 import com.example.weather.network.local.LocationDatabase
 import com.example.weather.viewmodel.LocationViewModel
 import com.example.weather.viewmodel.LocationViewModelFactory
-import com.google.android.material.navigation.NavigationBarView.OnItemSelectedListener
 
 
 class LocationFragment : Fragment() {
@@ -28,7 +26,10 @@ class LocationFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: LocationViewModel
     private lateinit var viewModelFactory: LocationViewModelFactory
-    var m = ArrayList<String>()
+    var countriesList = ArrayList<String>()
+    var citiesList = ArrayList<String>()
+    var country:String?=null
+    var city:String?=null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -52,57 +53,86 @@ class LocationFragment : Fragment() {
                 apply()
             }
         }
-        val adapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, m)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        countriesList.clear()
+        val adapterCountry: ArrayAdapter<String> =
+            ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, countriesList)
+        adapterCountry.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapterCity: ArrayAdapter<String> =
+            ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, citiesList)
+        adapterCity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCountry.setAdapter(adapterCountry)
+      //  binding.spinnerCountry.onItemSelectedListener
+        binding.spinnerCity.setAdapter(adapterCity)
+        //binding.spinnerCity.onItemSelectedListener
 
-        binding.spinner.setAdapter(adapter)
-        binding.spinner.onItemSelectedListener
         viewModel.getAllLocations()
 
-
-
-        viewModel.item.observe(viewLifecycleOwner, Observer {
+        viewModel.countryItem.observe(viewLifecycleOwner, Observer {
             it.forEach {
                 Log.i("this is1", it.country)
-                m.add(it.country)
-                adapter.notifyDataSetChanged()
+               // countriesList.clear()
+                countriesList.add(it.country)
             }
-
-
+            adapterCountry.notifyDataSetChanged()
         })
+
         // viewModel.clearAllLocations()
 
-        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinnerCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-
             }
-
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
                 id: Long,
             ) {
-                var s: String = binding.spinner.selectedItem.toString()
-                Toast.makeText(requireContext(), s, Toast.LENGTH_LONG).show()
+                 country= binding.spinnerCountry.selectedItem.toString()
+                Toast.makeText(requireContext(), country, Toast.LENGTH_LONG).show()
+
+                    viewModel.getCities(country!!)
+                viewModel.cityItem.observe(viewLifecycleOwner, Observer {
+                    it.forEach {
+                        //  Log.i("this is1", it.country)
+                        citiesList.clear()
+                        citiesList.add(it.city)
+                        adapterCity.notifyDataSetChanged()
+                    }
+                })
             }
 
         }
 
 
+        binding.spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long,
+            ) {
+                city= binding.spinnerCity.selectedItem.toString()
+                Log.i("cityyy", city!!)
+                Toast.makeText(requireContext(), city, Toast.LENGTH_LONG).show()
+
+            }
+
+        }
+
         binding.button.setOnClickListener {
 
-            if (!TextUtils.isEmpty(binding.etCity.text.toString()) &&
-                !TextUtils.isEmpty(binding.etCountry.text.toString())
-            ) {
-                val bundle: Bundle = bundleOf("citykey" to binding.etCity.text.toString(),
-                    "countrykey" to binding.etCountry.text.toString())
+            //if (!TextUtils.isEmpty(binding.etCity.text.toString())
+            //    !TextUtils.isEmpty(binding.etCountry.text.toString())
+            //) {
+                val bundle: Bundle = bundleOf("citykey" to city,
+                    "countrykey" to country)
                 it.findNavController()
                     .navigate(R.id.action_locationFragment_to_weatherFragment, bundle);
-            } else {
-                Toast.makeText(activity, "Please fill all empty fields", Toast.LENGTH_LONG).show()
-            }
+          //  } else {
+          //     Toast.makeText(activity, "Please fill all empty fields", Toast.LENGTH_LONG).show()
+          //  }
         }
         return view
     }

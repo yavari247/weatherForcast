@@ -12,8 +12,11 @@ interface LocationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocation(location: Location):Long
 
-    @Query("SELECT * FROM location_table")
+    @Query("SELECT * FROM location_table GROUP BY Country")
     fun getAllLocations(): Flow<List<Location>>
+
+    @Query("SELECT * FROM location_table WHERE Country= :country ")
+    fun getcities(country:String): Flow<List<Location>>
 
     @Query("DELETE FROM location_table")
     suspend fun deleteAll()
