@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.weather.viewmodel.Event
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -12,7 +13,7 @@ interface LocationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocation(location: Location):Long
 
-    @Query("SELECT * FROM location_table GROUP BY Country")
+    @Query("SELECT * FROM location_table ")
     fun getAllLocations(): Flow<List<Location>>
 
     @Query("SELECT * FROM location_table WHERE Country= :country ")

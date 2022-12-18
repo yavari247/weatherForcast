@@ -67,13 +67,28 @@ class LocationFragment : Fragment() {
 
         viewModel.getAllLocations()
 
+
+//        viewModel.countryItem.observe(viewLifecycleOwner, Observer {
+//            it.forEach {
+//                Log.i("this is1", it.country)
+//               // countriesList.clear()
+//                countriesList.add(it.country)
+//            }
+//
+//            adapterCountry.notifyDataSetChanged()
+//        })
         viewModel.countryItem.observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let {
+                // This is only executed if the event has never been handled
+
             it.forEach {
                 Log.i("this is1", it.country)
                // countriesList.clear()
                 countriesList.add(it.country)
             }
+
             adapterCountry.notifyDataSetChanged()
+            }
         })
 
         // viewModel.clearAllLocations()
@@ -92,10 +107,13 @@ class LocationFragment : Fragment() {
 
                     viewModel.getCities(country!!)
                 viewModel.cityItem.observe(viewLifecycleOwner, Observer {
-                    it.forEach {
-                        //  Log.i("this is1", it.country)
-                        citiesList.clear()
-                        citiesList.add(it.city)
+                    it.getContentIfNotHandled()?.let {
+                        it.forEach {
+                            //  Log.i("this is1", it.country)
+                            //  citiesList.clear()
+                            citiesList.add(it.city)
+
+                        }
                         adapterCity.notifyDataSetChanged()
                     }
                 })
@@ -140,6 +158,16 @@ class LocationFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
 }

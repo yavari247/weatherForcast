@@ -1,18 +1,22 @@
 package com.example.weather.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weather.network.local.Location
 import com.example.weather.network.local.LocationDatabase
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class LocationViewModel(
     private val locationDatabase: LocationDatabase
 ) : ViewModel() {
-    val countryItem=MutableLiveData<List<Location>>()
-    val cityItem=MutableLiveData<List<Location>>()
+    val countryItem=MutableLiveData<Event<List<Location>>>()
+//    val countryItem : LiveData<Event<Boolean>>
+//        get() =_countryItem
+    val cityItem=MutableLiveData<Event<List<Location>>>()
 
 
     init {
@@ -20,9 +24,10 @@ class LocationViewModel(
     }
     fun save(){
         viewModelScope.launch {
-            insert(Location("tehran","iran",0))
-            insert(Location("tehran","iran",1))
-            insert(Location("newyork","usa",2))
+
+            insert(Location("newyork","usa",0))
+            insert(Location("newyork","usa",1))
+            insert(Location("tehran","iran",2))
         }
     }
    // val locationsData = locationDatabase.locationDao.getAllLocations()
@@ -31,7 +36,7 @@ class LocationViewModel(
     fun getAllLocations(){
         viewModelScope.launch {
             locationDatabase.locationDao.getAllLocations().collect(){
-                    items -> countryItem.postValue(items)
+                    items -> countryItem.postValue(Event(items))
             }
         }
     }
@@ -39,7 +44,7 @@ class LocationViewModel(
     fun getCities(country:String){
         viewModelScope.launch {
             locationDatabase.locationDao.getcities(country).collect(){
-                    items -> this@LocationViewModel.cityItem.postValue(items)
+                    items -> this@LocationViewModel.cityItem.postValue(Event(items))
             }
         }
     }
