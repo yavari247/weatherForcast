@@ -106,14 +106,17 @@ class LocationFragment : Fragment() {
                 Toast.makeText(requireContext(), country, Toast.LENGTH_LONG).show()
 
                     viewModel.getCities(country!!)
+
                 viewModel.cityItem.observe(viewLifecycleOwner, Observer {
                     it.getContentIfNotHandled()?.let {
                         it.forEach {
                             //  Log.i("this is1", it.country)
-                            //  citiesList.clear()
+
+                            if(!citiesList.contains(it.city))
                             citiesList.add(it.city)
 
                         }
+
                         adapterCity.notifyDataSetChanged()
                     }
                 })

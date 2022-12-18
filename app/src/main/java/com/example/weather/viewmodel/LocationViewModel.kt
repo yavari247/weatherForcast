@@ -44,7 +44,7 @@ class LocationViewModel(
     fun getCities(country:String){
         viewModelScope.launch {
             locationDatabase.locationDao.getcities(country).collect(){
-                    items -> this@LocationViewModel.cityItem.postValue(Event(items))
+                    items -> cityItem.postValue(Event(items))
             }
         }
     }
