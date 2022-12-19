@@ -1,5 +1,4 @@
 package com.example.weather.ui.fragments
-
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -18,7 +17,6 @@ import com.example.weather.databinding.FragmentLocationBinding
 import com.example.weather.network.local.LocationDatabase
 import com.example.weather.viewmodel.LocationViewModel
 import com.example.weather.viewmodel.LocationViewModelFactory
-
 
 class LocationFragment : Fragment() {
     private var _binding: FragmentLocationBinding? = null
