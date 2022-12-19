@@ -84,6 +84,7 @@ class LocationFragment : Fragment() {
             it.forEach {
                 Log.i("this is1", it.country)
                // countriesList.clear()
+                if(!countriesList.contains(it.country))
                 countriesList.add(it.country)
             }
 
@@ -108,17 +109,17 @@ class LocationFragment : Fragment() {
                     viewModel.getCities(country!!)
 
                 viewModel.cityItem.observe(viewLifecycleOwner, Observer {
-                    it.getContentIfNotHandled()?.let {
+                        citiesList.clear()
                         it.forEach {
                             //  Log.i("this is1", it.country)
 
-                            if(!citiesList.contains(it.city))
+                            if(!citiesList.contains(it.city) && it.country==country )
                             citiesList.add(it.city)
 
                         }
 
                         adapterCity.notifyDataSetChanged()
-                    }
+
                 })
             }
 

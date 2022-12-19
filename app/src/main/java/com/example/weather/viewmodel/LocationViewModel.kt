@@ -16,7 +16,7 @@ class LocationViewModel(
     val countryItem=MutableLiveData<Event<List<Location>>>()
 //    val countryItem : LiveData<Event<Boolean>>
 //        get() =_countryItem
-    val cityItem=MutableLiveData<Event<List<Location>>>()
+    val cityItem=MutableLiveData<List<Location>>()
 
 
     init {
@@ -25,9 +25,11 @@ class LocationViewModel(
     fun save(){
         viewModelScope.launch {
 
-            insert(Location("newyork","usa",0))
-            insert(Location("newyork","usa",1))
-            insert(Location("tehran","iran",2))
+            insert(Location("newyork","usa"))
+            insert(Location("washington","usa"))
+            insert(Location("tehran","iran"))
+            insert(Location("yazd","iran"))
+            insert(Location("berlin","germany"))
         }
     }
    // val locationsData = locationDatabase.locationDao.getAllLocations()
@@ -44,7 +46,7 @@ class LocationViewModel(
     fun getCities(country:String){
         viewModelScope.launch {
             locationDatabase.locationDao.getcities(country).collect(){
-                    items -> cityItem.postValue(Event(items))
+                    items -> cityItem.postValue(items)
             }
         }
     }

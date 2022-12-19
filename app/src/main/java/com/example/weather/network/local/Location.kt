@@ -16,7 +16,7 @@ data class Location (
 
 
     @PrimaryKey(autoGenerate = true)
-    var id : Int
+    var id : Int=0
 
 
 
