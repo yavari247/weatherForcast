@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -44,7 +43,6 @@ class LocationFragment : Fragment() {
         val sharedPref = requireContext().getSharedPreferences(
             "mySharedPrefData", Context.MODE_PRIVATE)
         val editor = sharedPref.edit()
-
         val f = sharedPref.getBoolean("key", true)
         if (f == true) {
             viewModel.save()
@@ -61,29 +59,13 @@ class LocationFragment : Fragment() {
             ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, citiesList)
         adapterCity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerCountry.setAdapter(adapterCountry)
-      //  binding.spinnerCountry.onItemSelectedListener
         binding.spinnerCity.setAdapter(adapterCity)
-        //binding.spinnerCity.onItemSelectedListener
-
         viewModel.getAllLocations()
-
-
-//        viewModel.countryItem.observe(viewLifecycleOwner, Observer {
-//            it.forEach {
-//                Log.i("this is1", it.country)
-//               // countriesList.clear()
-//                countriesList.add(it.country)
-//            }
-//
-//            adapterCountry.notifyDataSetChanged()
-//        })
         viewModel.countryItem.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let {
                 // This is only executed if the event has never been handled
-
             it.forEach {
                 Log.i("this is1", it.country)
-               // countriesList.clear()
                 if(!countriesList.contains(it.country))
                 countriesList.add(it.country)
             }
@@ -91,9 +73,6 @@ class LocationFragment : Fragment() {
             adapterCountry.notifyDataSetChanged()
             }
         })
-
-        // viewModel.clearAllLocations()
-
         binding.spinnerCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -104,22 +83,15 @@ class LocationFragment : Fragment() {
                 id: Long,
             ) {
                  country= binding.spinnerCountry.selectedItem.toString()
-                Toast.makeText(requireContext(), country, Toast.LENGTH_LONG).show()
-
                     viewModel.getCities(country!!)
-
                 viewModel.cityItem.observe(viewLifecycleOwner, Observer {
                         citiesList.clear()
                         it.forEach {
-                            //  Log.i("this is1", it.country)
-
                             if(!citiesList.contains(it.city) && it.country==country )
                             citiesList.add(it.city)
 
                         }
-
                         adapterCity.notifyDataSetChanged()
-
                 })
             }
 
@@ -136,25 +108,15 @@ class LocationFragment : Fragment() {
                 id: Long,
             ) {
                 city= binding.spinnerCity.selectedItem.toString()
-                Log.i("cityyy", city!!)
-                Toast.makeText(requireContext(), city, Toast.LENGTH_LONG).show()
-
             }
 
         }
 
         binding.button.setOnClickListener {
-
-            //if (!TextUtils.isEmpty(binding.etCity.text.toString())
-            //    !TextUtils.isEmpty(binding.etCountry.text.toString())
-            //) {
                 val bundle: Bundle = bundleOf("citykey" to city,
                     "countrykey" to country)
                 it.findNavController()
                     .navigate(R.id.action_locationFragment_to_weatherFragment, bundle);
-          //  } else {
-          //     Toast.makeText(activity, "Please fill all empty fields", Toast.LENGTH_LONG).show()
-          //  }
         }
         return view
     }
@@ -164,14 +126,5 @@ class LocationFragment : Fragment() {
         _binding = null
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-    }
 
 }
