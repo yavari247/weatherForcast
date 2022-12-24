@@ -1,10 +1,10 @@
-package com.example.weather.network.remoat
+package com.example.weather.data.network
 
 import com.example.weather.model.weather
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface WeatherService {
+interface WeatherServiceApi {
 
     companion object {
         const val unitGroup = "us"

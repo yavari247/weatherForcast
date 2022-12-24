@@ -7,15 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.weather.data.Repository
 import com.example.weather.repository.ForcastWeather
 import com.example.weather.repository.ForcastWeatherImpl
 import com.example.weather.viewmodel.WeatherViewModel
 import com.example.weather.viewmodel.WeatherViewModelFactory
 import com.example.weather.databinding.FragmentWeatherBinding
 import com.example.weather.network.local.LocationDatabase
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class weatherFragment : Fragment() {
+    @Inject lateinit var  repository: Repository
 
     private var _binding: FragmentWeatherBinding? = null
     private val binding get() = _binding!!
@@ -33,7 +37,8 @@ class weatherFragment : Fragment() {
 
     private fun getDataWeather() {
         val forcastWeather: ForcastWeather = ForcastWeatherImpl()
-        viewModelFactory =  WeatherViewModelFactory(makeLocationString(),forcastWeather)
+
+        viewModelFactory =  WeatherViewModelFactory(repository,makeLocationString(),forcastWeather)
         viewModel = ViewModelProvider(this,viewModelFactory).get(WeatherViewModel::class.java)
         viewModel.weather.observe(viewLifecycleOwner, Observer {
             val data= it?.days
